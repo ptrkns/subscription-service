@@ -1,7 +1,28 @@
-const isServiceSelected = () : boolean => { return false; }
-const handleDropdownChange = () => {}
+import { useState } from "react";
+import Service from "./Service.tsx";
+import services from '../assets/services.json';
 
 function PackageCreation() {
+
+  const isServiceSelected = () : boolean => { return false; }
+
+  const [duration, setDuration] = useState(1);
+  const handleDropdownChange = (e) => {
+      const optionValue = Number(e.target.value);
+      setDuration(optionValue);
+  };
+
+  const filteredServices = services.filter(s => s.duration === duration);
+  const serviceData = filteredServices.map(s => {
+      return <Service key={s.serviceID}
+                serviceID={s.serviceID}
+                name={s.name}
+                description={s.description}
+                duration={s.duration}
+                price={s.price}
+              />
+  });
+
   return (
     <div>
       <section>
@@ -9,7 +30,7 @@ function PackageCreation() {
         <p className="text-base md:text-xl mb-5 cursor-default">Filter available services by subscription period! The filter you choose will determine the subscription period of your package.</p>
         <select
           disabled={isServiceSelected()}
-          onChange={handleDropdownChange()}
+          onChange={(e) => handleDropdownChange(e)}
           className="w-full py-2 px-1 mb-5 cursor-pointer"
         >
           <option value={1}>Monthly subscription</option>
@@ -17,9 +38,7 @@ function PackageCreation() {
           <option value={12}>Annual subscription</option>
         </select>
       </section>
-      <section>
-        Services
-      </section>
+      <section> {serviceData} </section>
       <section className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-4 my-5">
         <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4">Create package</button>
         <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4">Continue to payment</button>
