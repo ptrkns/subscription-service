@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Service from "./Service.tsx";
-import services from '../assets/services.json';
+import services from '../../public/assets/services.json';
 
 function PackageCreation() {
 
