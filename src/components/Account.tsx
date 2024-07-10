@@ -10,9 +10,9 @@ function Account() {
     <div>
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Account management</h1>
-        <p className="bg-blue-600 p-2 text-white text-center cursor-default">USER #####</p>
+        <p className="bg-blue-600 p-2 text-white text-center cursor-default shadow-lg">USER #####</p>
       </div>
-      <form className="bg-gray-200 px-4 py-1 mb-3">
+      <form className="bg-gray-200 px-4 py-1 mb-3 shadow-lg">
         <h2 className="font-bold text-xl md:text-2xl py-4 text-gray-800 cursor-default">Update email address</h2>
         <div className="flex flex-row mb-2">
           <p className="mr-1">Current email address:</p>
@@ -30,7 +30,7 @@ function Account() {
         </div>
       </form>
 
-      <form className="bg-gray-200 px-4 py-1 mb-3">
+      <form className="bg-gray-200 px-4 py-1 mb-3 shadow-lg">
         <div>
           <h2 className="font-bold text-xl md:text-2xl py-4 text-gray-800 cursor-default">Update password</h2>
           <p className="mb-3">Passwords must be at least 6 characters long!</p>
@@ -58,7 +58,7 @@ function Account() {
         </div>
       </form>
 
-      <section className="flex flex-col justify-center bg-gray-200 px-4 pt-1 pb-3 mb-5 md:mb-10 lg:mb-10">
+      <section className="flex flex-col justify-center bg-gray-200 px-4 pt-1 pb-3 mb-5 md:mb-10 lg:mb-10 shadow-lg">
         <h2 className="font-bold text-xl md:text-2xl py-4 text-gray-800 cursor-default">Update wallet address</h2>
         <p className="mb-3">Open the MetaMask extension, select the wallet you want to use, then click the address below to load the new address into the app</p>
         <div className="border-2 border-black mt-1 mb-3 p-1 bg-white" onClick={requestAccount()}>Address</div>
