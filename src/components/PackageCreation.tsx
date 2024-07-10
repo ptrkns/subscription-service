@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Service from "./Service.tsx";
 import services from '../assets/services.json';
 
 function PackageCreation() {
+
+  const navigate = useNavigate();
+  const [isPackageReady, setIsPackageReady] = useState(false);
+  const handleClick = () => { setIsPackageReady(true); }
 
   const isServiceSelected = () : boolean => { return false; }
 
@@ -39,9 +44,15 @@ function PackageCreation() {
         </select>
       </section>
       <section> {serviceData} </section>
-      <section className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-4 my-5">
-        <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4">Create package</button>
-        <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4">Continue to payment</button>
+      <section className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-4 my-10">
+        {isPackageReady ?
+          <button className="border-2 border-blue-600 text-blue-600 py-4 cursor-default" disabled>Create package</button> :
+          <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4" onClick={() => handleClick()}>Create package</button>
+        }
+        {isPackageReady ?
+          <button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4" onClick={() => navigate('/payment')}>Continue to payment</button> :
+          <button className="border-2 border-blue-600 text-blue-600 py-4 cursor-default" disabled>Continue to payment</button>
+        }
       </section>
     </div>
   );
