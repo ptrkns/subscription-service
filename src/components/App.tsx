@@ -15,10 +15,10 @@ function App() {
         <Header/>
         <div className='mx-5 md:m-auto lg:m-auto md:w-2/3 lg:w-2/3'>
           <Routes>
-            <Route exact path='/' element={<Home/>}/>
-            <Route exact path='/package-creation' element={<PackageCreation/>}/>
-            <Route exact path='/subscriptions' element={<Subscriptions/>}/>
-            <Route exact path='/account' element={<Account/>}/>
+            <Route path='/' element={<Home/>}/>
+            <Route path='/package-creation' element={<PackageCreation/>}/>
+            <Route path='/subscriptions' element={<Subscriptions/>}/>
+            <Route path='/account' element={<Account/>}/>
           </Routes>
         </div>
         <Footer/>
