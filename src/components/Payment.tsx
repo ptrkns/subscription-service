@@ -36,7 +36,6 @@ function Payment() {
         });
     };
 
-
     const initPay = () => {
         setPaymentSuccess((prevState) => {
             var newState = !prevState;
@@ -55,7 +54,7 @@ function Payment() {
 
     const serviceList = newPackage.services.map((service) => {
         return(
-            <div key={`${service.serviceID}`} className="grid grid-cols-2 border-2 border-black bg-white p-1 mb-2">
+            <div key={`${service.serviceID}`} className="grid grid-cols-2 border-b-2 border-black text-center py-2">
                 <p>{service.name}</p>
                 <p>{service.price}</p>
             </div>
@@ -65,27 +64,26 @@ function Payment() {
     return (
         <div className="min-h-screen md:mt-20">
             <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Payment</h1>
-            <section className="bg-gray-300 cursor-default shadow-lg px-4 pt-4">
-                <h2 className="font-bold text-xl md:text-2xl pb-2 text-gray-800">{packageName()}</h2>
-                <div className="grid grid-cols-2 grid-rows-2">
-                    <p className="mt-2 mb-1 font-semibold">Starting date</p>
-                    <p className="text-end mt-2 mb-1">{newPackage.sDate.toDateString()}</p>
-                    <p className="text-end mt-2 mb-1 font-semibold">End date</p>
-                    <p className="mt-2 mb-1">{newPackage.eDate.toDateString()}</p>
+            <section className="bg-gray-300 mb-3 cursor-default shadow-lg">
+                <div className='flex flex-row justify-between items-center px-4 pt-4'>
+                    <h2 className="font-bold text-xl md:text-2xl text-gray-800 cursor-default">{packageName()}</h2>
+                    <p className={`p-1 md:p-2 text-center bg-blue-600 text-white mr-1`}>ID: {newPackage.packageID}</p>
                 </div>
-                <div>
-                    <p className="my-4 font-semibold">Included services</p>
-                    {serviceList}
-                </div>
-                <div className="grid grid-cols-2 grid-rows-2">
-                    <p className="mt-4 font-semibold">Total price</p>
-                    <p className="mt-4">{newPackage.price}</p>
+                <div className="grid grid-cols-2 gap-2 px-4 pt-4 w-full">
+                    <p className="py-1 border-2 border-black bg-white text-center">{newPackage.sDate.toDateString()}</p>
+                    <p className="py-1 border-2 border-black bg-white text-center">{newPackage.eDate.toDateString()}</p>
+                    <div className="col-span-2 mb-5">
+                        <p className="my-4 text-xl font-semibold">Included services</p>
+                        {serviceList}
+                        <p className="mt-5 text-xl font-semibold">Total price: {newPackage.price} USD</p>
+                        <p className="mt-2 text-xl">1 USD = 0,00032 ETH</p>
+                        <p className="mt-2 text-xl font-semibold">Total price in ETH: {newPackage.price * 0.00032} ETH</p>
+                    </div>
                 </div>
             </section>
-
             <section className="grid grid-cols-2 md:grid-cols-3 gap-2 my-10">
                 <button className="border-2 border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-100 font-semibold py-4" onClick={handleCancel}>Cancel</button>
-                <button className={`py-4 col-span-2 md:col-span-1 font-semibold ${confirmDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}
+                <button className={`py-4 md:col-span-1 font-semibold ${confirmDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}
                     disabled={confirmDisabled === true} onClick={handleConfirm}>Confirm selection</button>
                 <button
                     className={`py-4 col-span-2 md:col-span-1 font-semibold ${paymentDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}
