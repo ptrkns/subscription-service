@@ -1,4 +1,4 @@
-import { PackageProps } from '../interfaces/PackageProps.ts';
+import { PackageProps } from '../interfaces/PackageProps.tsx';
 import DateHandler from '../utility/DateHandler.ts';
 
 function Package(props:PackageProps) {
@@ -28,7 +28,7 @@ function Package(props:PackageProps) {
         <section className='flex flex-col md:flex-row md:justify-between md:items-center px-4 pt-4'>
             <h2 className="font-bold text-xl md:text-2xl text-gray-800 cursor-default">{packageName()} package</h2>
             <div className='flex flex-row mt-3 md:m-0 justify-end'>
-                {props.isActive ? <p className="p-1 md:p-2 text-center bg-blue-600 text-white mr-1">ID: {props.packageID}</p> : <p className="p-1 md:p-2 text-center bg-red-600 text-white mr-1">ID: {props.packageID}</p>}
+                <p className={`p-1 md:p-2 text-center ${props.isActive ? 'bg-blue-600' : 'bg-red-600'} text-white mr-1`}>ID: {props.packageID}</p>
                 {props.isActive === false && <p className='p-1 md:p-2 text-center bg-red-600 text-white mr-1'>Remove</p>}
                 {props.isActive ? <p className="p-1 md:p-2 text-center bg-blue-600 text-white">Active</p> : <p className="p-1 md:p-2 text-center bg-red-600 text-white">Inactive</p>}
             </div>
