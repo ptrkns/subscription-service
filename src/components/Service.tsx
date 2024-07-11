@@ -9,10 +9,20 @@ function Service(props: ServiceProps) {
 
     const priceAndDuration = () => {
         switch(props.duration){
-            case 1: return `${props.price} ETH / month`;
-            case 6: return `${props.price} ETH / 6 months`;
-            case 12: return `${props.price} ETH / year`;
-            default: return;
+            case 1: {return `${props.price} USD / month`;}
+            case 6: {
+                return(<>
+                <p>{`${props.price / 6}  USD / month`}</p>
+                <p>{`${props.price}  USD in total`}</p>
+                </>);
+            }
+            case 12: {
+                return(<>
+                    <p>{`${props.price / 12} USD / month`}</p>
+                    <p>{`${props.price} USD in total`}</p>
+                </>);
+            }
+            default: {return};
         };
     }
 
@@ -38,7 +48,7 @@ function Service(props: ServiceProps) {
             <p className="text-justify pr-2 cursor-pointer">{props.description}</p>
         </div>
         <div className="m-auto text-right md:mx-0 pr-2 cursor-pointer">
-            <p>{priceAndDuration()}</p>
+            {priceAndDuration()}
         </div>
     </div>
   );
