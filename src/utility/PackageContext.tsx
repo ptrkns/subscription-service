@@ -13,6 +13,7 @@ interface PackageContextProps {
     addPackage: () => void;
     deactivatePackage: (packageID: string) => void;
     removePackage: (packageID: string) => void;
+    renewPackage: (packageID: string) => void;
 };
 
 const initialPackage = {
@@ -33,7 +34,8 @@ const PackageContext = createContext<PackageContextProps>({
     setPackage: () => {},
     addPackage: () => {},
     deactivatePackage: () => {},
-    removePackage: () => {}
+    removePackage: () => {},
+    renewPackage: () => {}
 });
 
 export const PackageProvider = (props: ProviderProps) => {
@@ -66,8 +68,21 @@ export const PackageProvider = (props: ProviderProps) => {
         setNewPackage(initialPackage);
     };
 
+    const renewPackage = (packageID: string) => {
+        setExpiredPackages((prevExpPackages) => {
+            var tmpPackage = expiredPackages.find(p => p.packageID === packageID);
+            if(tmpPackage) {
+                tmpPackage!.isActive = true;
+                setNewPackage(tmpPackage!);
+                setActivePackages((prevPackages) => [...prevPackages, tmpPackage!]);
+                return prevExpPackages.filter(pkg => pkg.packageID !== packageID);
+            }
+            return prevExpPackages;
+        });
+    }
+
     return(
-        <PackageContext.Provider value={{newPackage, activePackages, expiredPackages, setPackage, addPackage, deactivatePackage, removePackage}}>
+        <PackageContext.Provider value={{newPackage, activePackages, expiredPackages, setPackage, addPackage, deactivatePackage, removePackage, renewPackage}}>
             {props.children}
         </PackageContext.Provider>
     );
