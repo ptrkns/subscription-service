@@ -4,12 +4,18 @@ import Service from "./Service.tsx";
 import Services from '../../public/assets/services.json';
 import { useService } from "../utility/ServiceContext.tsx";
 import { usePackage } from '../utility/PackageContext.tsx';
+import { PackageAssembler } from "../utility/PackageAssembler.tsx";
+import DateHandler from "../utility/DateHandler.ts";
 
 function PackageCreation() {
 
   const navigate = useNavigate();
   const {services} = useService();
-  const {activePackages, addPackage} = usePackage();
+  const {setPackage} = usePackage();
+  const {getCurrentDate, getEndDate} = DateHandler();
+  const {calculatePrice, assemblePackage} = PackageAssembler();
+
+  const [duration, setDuration] = useState(1);
   const [packageReady, setPackageReady] = useState(false);
   const [paymentReady, setPaymentReady] = useState(false);
 
@@ -19,12 +25,15 @@ function PackageCreation() {
   }, [services]);
 
   const handleClick = () => {
-    /* + A csomag létrehozása */
+    var price = calculatePrice(services);
+    var sDate = getCurrentDate();
+    var eDate = getEndDate(duration);
+    var newPackage = assemblePackage("1", true, services, price, duration, sDate, eDate);
+    setPackage(newPackage);
     setPaymentReady(true);
     setPackageReady(false);
-  }
+  };
 
-  const [duration, setDuration] = useState(1);
   const handleDropdownChange = (e: any) => {
       const optionValue = Number(e.target.value);
       setDuration(optionValue);
