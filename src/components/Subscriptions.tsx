@@ -1,44 +1,51 @@
 import Package from "./Package.tsx";
-
-import DateHandler from "../utility/DateHandler.ts";
+import { usePackage } from "../utility/PackageContext.tsx";
 
 function Subscriptions() {
 
-  const { getCurrentDate, getEndDate } = DateHandler();
+  const {activePackages, expiredPackages} = usePackage();
+
+  const activePackageComponents = activePackages.map((pkg) => {
+    return(<Package
+      key={pkg.packageID}
+      packageID = {pkg.packageID}
+      userID = {pkg.userID}
+      isActive={pkg.isActive}
+      services={pkg.services}
+      price={pkg.price}
+      duration={pkg.duration}
+      sDate={pkg.sDate}
+      eDate={pkg.eDate}>
+    </Package>);
+  });
+
+  const expiredPackageComponents = expiredPackages.map((pkg) => {
+    return(<Package
+      key={pkg.packageID}
+      packageID = {pkg.packageID}
+      userID = {pkg.userID}
+      isActive={pkg.isActive}
+      services={pkg.services}
+      price={pkg.price}
+      duration={pkg.duration}
+      sDate={pkg.sDate}
+      eDate={pkg.eDate}>
+    </Package>);
+  });
 
   return (
     <div className="min-h-screen md:mt-20">
       <section>
           <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Active subscriptions</h1>
-          <p className="text-base md:text-xl mb-5 cursor-default">Warning: Cancellation of the subscriptions is immediate! By performing this action, you will loose access to the services!</p>
-          <div className="mb-5">
-          <Package
-              packageID={"1"}
-              userID={"1"}
-              isActive={true}
-              services={[]}
-              price={1}
-              duration={6}
-              sDate={getCurrentDate()}
-              eDate={getEndDate(6)}
-          />
-          </div>
+          {activePackages.length !== 0 && <p className="text-base md:text-xl mb-5 cursor-default">Warning: Cancellation of the subscriptions is immediate! By performing this action, you will loose access to the services!</p>}
+          {activePackages.length === 0 && <p className="text-base md:text-xl mb-5 cursor-default">There are no active subscriptions.</p>}
+          <div className="mb-5"> {activePackageComponents} </div>
       </section>
       <section>
           <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Expired subscriptions</h1>
-          <p className="text-base md:text-xl mb-5 cursor-default">By clicking the "Renew subscription" button, you can regain access to the services in the package after payment.</p>
-          <div className="mb-10">
-          <Package
-              packageID={"1"}
-              userID={"1"}
-              isActive={false}
-              services={[]}
-              price={1}
-              duration={12}
-              sDate={getCurrentDate()}
-              eDate={getEndDate(12)}
-          />
-          </div>
+          {expiredPackages.length !== 0 && <p className="text-base md:text-xl mb-5 cursor-default">By clicking the "Renew subscription" button, you can regain access to the services in the package after payment.</p>}
+          {expiredPackages.length === 0 && <p className="text-base md:text-xl mb-5 cursor-default">There are no expired subscriptions.</p>}
+          <div className="mb-10"> {expiredPackageComponents} </div>
       </section>
     </div>
   );
