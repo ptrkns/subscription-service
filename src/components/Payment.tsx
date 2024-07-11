@@ -63,7 +63,7 @@ function Payment() {
     });
 
     return (
-        <div>
+        <div className="min-h-screen md:mt-20">
             <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Payment</h1>
             <section className="bg-gray-300 cursor-default shadow-lg px-4 pt-4">
                 <h2 className="font-bold text-xl md:text-2xl pb-2 text-gray-800">{packageName()}</h2>
