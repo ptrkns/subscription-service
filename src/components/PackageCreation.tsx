@@ -62,7 +62,10 @@ function PackageCreation() {
           <option value={12}>Annual subscription</option>
         </select>
       </section>
-      <section> {serviceData} </section>
+      <section>
+        {serviceData}
+        <p className="text-base md:text-xl my-10 cursor-default">The prices will be converted on the next page.</p>
+      </section>
       <section className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-4 my-10">
         <button
           className={`py-4 ${packageReady === false ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white font-semibold"}`}
