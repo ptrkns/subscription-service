@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { ServiceProps } from '../interfaces/ServiceProps.ts';
+import { ServiceProps } from '../interfaces/ServiceProps.tsx';
 
 type ProviderProps = {
   children : React.ReactNode;
