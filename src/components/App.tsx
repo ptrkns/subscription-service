@@ -9,7 +9,6 @@ import Footer from './Footer.tsx';
 import Home from './Home.tsx';
 import PackageCreation from './PackageCreation.tsx';
 import Subscriptions from './Subscriptions.tsx';
-import Account from './Account.tsx';
 import Payment from './Payment.tsx';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
                 <Route path='/' element={<Home/>}/>
                 <Route path='/package-creation' element={<PackageCreation/>}/>
                 <Route path='/subscriptions' element={<Subscriptions/>}/>
-                <Route path='/account' element={<Account/>}/>
                 <Route path='/payment' element={<Payment/>}/>
               </Routes>
             </div>
