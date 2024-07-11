@@ -1,9 +1,17 @@
 import { PackageProps } from '../interfaces/PackageProps.tsx';
+import { usePackage } from "../utility/PackageContext.tsx";
 import DateHandler from '../utility/DateHandler.ts';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Package(props:PackageProps) {
 
+    const {deactivatePackage, removePackage, renewPackage} = usePackage();
     const { dateToString } = DateHandler();
+    const navigate = useNavigate();
+    const [cancel, setCancel] = useState(false);
+    const [remove, setRemove] = useState(false);
+    const [renew, setRenew] = useState(false);
 
     const packageName = () => {
         switch (props.duration) {
@@ -23,13 +31,59 @@ function Package(props:PackageProps) {
         }
     };
 
+    const activeServiceNames = props.services.map((service) => {
+        return( <p key={service.serviceID} className='p-1 md:p-2 text-center bg-blue-600 text-white mr-1'>{service.name}</p> );
+    });
+
+    const expiredServiceNames = props.services.map((service) => {
+        return( <p key={service.serviceID} className='p-1 md:p-2 text-center bg-red-600 text-white mr-1'>{service.name}</p> );
+    });
+
+    useEffect(() => {
+        if(cancel) deactivatePackage(props.packageID);
+    }, [cancel]);
+
+    const handleCancel = () => {
+        setCancel((prev)=>{
+            var curr = !prev;
+            return curr;
+        });
+    };
+
+    useEffect(() => {
+        if(remove) removePackage(props.packageID);
+    }, [remove]);
+
+    const handleRemove = () => {
+        setRemove((prev)=>{
+            var curr = !prev;
+            return curr;
+        });
+    };
+
+    useEffect(() => {
+        if(renew) {
+            renewPackage(props.packageID);
+            navigate('/payment');
+        }
+    }, [renew]);
+
+    const handleRenew = () => {
+        setRenew((prev)=>{
+            var curr = !prev;
+            return curr;
+        });
+    };
+
     return (
-    <div className="bg-gray-300 mb-3 cursor-default shadow-lg">
+    <div className="bg-gray-300 mb-5 cursor-default shadow-lg">
         <section className='flex flex-col md:flex-row md:justify-between md:items-center px-4 pt-4'>
             <h2 className="font-bold text-xl md:text-2xl text-gray-800 cursor-default">{packageName()} package</h2>
-            <div className='flex flex-row mt-3 md:m-0 justify-end'>
-                <p className={`p-1 md:p-2 text-center ${props.isActive ? 'bg-blue-600' : 'bg-red-600'} text-white mr-1`}>ID: {props.packageID}</p>
-                {props.isActive === false && <p className='p-1 md:p-2 text-center bg-red-600 text-white mr-1'>Remove</p>}
+            <div className='flex flex-row mt-3 md:m-0 md:justify-end'>
+                {props.isActive === false && <button className='p-1 md:p-2 text-center border-2 border-red-600  text-red-600  hover:bg-gray-200 mr-1' onClick={handleRenew}>Renew</button>}
+                {props.isActive ?
+                    <button className='p-1 md:p-2 text-center border-2 border-blue-600 text-blue-600 hover:bg-gray-200 mr-1' onClick={handleCancel}>Cancel</button>:
+                    <button className='p-1 md:p-2 text-center border-2 border-red-600  text-red-600  hover:bg-gray-200 mr-1' onClick={handleRemove}>Remove</button>}
                 {props.isActive ? <p className="p-1 md:p-2 text-center bg-blue-600 text-white">Active</p> : <p className="p-1 md:p-2 text-center bg-red-600 text-white">Inactive</p>}
             </div>
         </section>
@@ -38,8 +92,11 @@ function Package(props:PackageProps) {
                 <p className="py-1 border-2 border-black bg-white text-center">{dateToString(props.sDate)}</p>
                 <p className="py-1 border-2 border-black bg-white text-center">{dateToString(props.eDate)}</p>
             </div>
-            <p>Includes: servicesNames</p>
-            <p className="mt-2 mb-1">{props.price} ETH / {packageDuration()}</p>
+            <div className='flex flex-row justify-start items-center'>
+                <p className={`p-1 md:p-2 text-center ${props.isActive ? 'bg-blue-600' : 'bg-red-600'} text-white mr-1`}>ID: {props.packageID}</p>
+                {props.isActive ? activeServiceNames : expiredServiceNames}
+            </div>
+            <p className="mt-4 mb-1 font-semibold">{props.price} USD / {packageDuration()}</p>
         </section>
     </div>
   );
