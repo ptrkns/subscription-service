@@ -8,22 +8,31 @@ function Payment() {
     const [paymentDisabled, setPaymentDisabled] = useState(true);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const navigate = useNavigate();
+    const {newPackage, paymentAction, addPackage} = usePackage();
     const {clearServices} = useService();
-    const {newPackage, addPackage, removePackage} = usePackage();
+
+    const packageName = () => {
+        switch(newPackage.duration){
+            case 1: return 'Monthly Package';
+            case 6: return '6 Months Package';
+            case 12: return 'Annual Package';
+            default: throw new Error('Error: invalid duration value!');
+        };
+    };
+
+    const serviceList = newPackage.services.map((service) => {
+        return(
+            <div key={`${service.serviceID}`} className="grid grid-cols-2 border-b-2 border-black text-center py-2">
+                <p>{service.name}</p>
+                <p>{service.price} USD</p>
+            </div>
+        );
+    });
 
     const handleCancel = () => {
         clearServices();
-        removePackage(newPackage.packageID);
         navigate('/package-creation');
     };
-
-    useEffect(()=>{
-        if(paymentSuccess){
-            addPackage();
-            clearServices();
-            navigate('/package-creation');
-        }
-    }, [paymentSuccess]);
 
     const handleConfirm = () => {
         setPaymentDisabled((prevState) => {
@@ -36,30 +45,20 @@ function Payment() {
         });
     };
 
+    useEffect(()=>{
+        if(paymentSuccess){
+            addPackage(paymentAction);
+            clearServices();
+            navigate('/package-creation');
+        }
+    }, [paymentSuccess]);
+
     const initPay = () => {
         setPaymentSuccess((prevState) => {
             var newState = !prevState;
             return newState;
         });
     };
-
-    const packageName = () => {
-        switch(newPackage.duration){
-            case 1: return 'Monthly Package';
-            case 6: return '6 Months Package';
-            case 12: return 'Annual Package';
-            default: throw new Error('Error: invalid duration value!');
-        };
-    }
-
-    const serviceList = newPackage.services.map((service) => {
-        return(
-            <div key={`${service.serviceID}`} className="grid grid-cols-2 border-b-2 border-black text-center py-2">
-                <p>{service.name}</p>
-                <p>{service.price} USD</p>
-            </div>
-        );
-    });
 
     return (
         <div className="min-h-screen md:mt-20">
@@ -75,15 +74,16 @@ function Payment() {
                     <div className="col-span-2 mb-5">
                         <p className="my-4 text-xl font-semibold">Included services</p>
                         {serviceList}
-                        <p className="mt-5 text-xl font-semibold">Total price: {newPackage.price} USD</p>
+                        <p className="mt-5 text-xl font-semibold">Total price: {newPackage.price / 0.00032} USD</p>
                         <p className="mt-2 text-xl">1 USD = 0,00032 ETH</p>
-                        <p className="mt-2 text-xl font-semibold">Total price in ETH: {newPackage.price * 0.00032} ETH</p>
+                        <p className="mt-2 text-xl font-semibold">Total price in ETH: {newPackage.price} ETH</p>
                     </div>
                 </div>
             </section>
             <section className="grid grid-cols-2 md:grid-cols-3 gap-2 my-10">
                 <button className="border-2 border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-100 font-semibold py-4" onClick={handleCancel}>Cancel</button>
-                <button className={`py-4 md:col-span-1 font-semibold ${confirmDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}
+                <button
+                    className={`py-4 md:col-span-1 font-semibold ${confirmDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}
                     disabled={confirmDisabled === true} onClick={handleConfirm}>Confirm selection</button>
                 <button
                     className={`py-4 col-span-2 md:col-span-1 font-semibold ${paymentDisabled === true ? "border-2 border-blue-600 text-blue-600 cursor-default" : "bg-blue-600 hover:bg-blue-500 text-white"}`}

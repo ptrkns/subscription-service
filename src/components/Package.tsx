@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Package(props:PackageProps) {
 
-    const {deactivatePackage, removePackage, renewPackage} = usePackage();
+    const {deactivatePackage, removePackage, findExpiredPackage} = usePackage();
     const { dateToString } = DateHandler();
     const navigate = useNavigate();
     const [cancel, setCancel] = useState(false);
@@ -63,7 +63,7 @@ function Package(props:PackageProps) {
 
     useEffect(() => {
         if(renew) {
-            renewPackage(props.packageID);
+            findExpiredPackage(props.packageID);
             navigate('/payment');
         }
     }, [renew]);
@@ -96,7 +96,7 @@ function Package(props:PackageProps) {
                 <p className={`p-1 md:p-2 text-center ${props.isActive ? 'bg-blue-600' : 'bg-red-600'} text-white mr-1`}>ID: {props.packageID}</p>
                 {props.isActive ? activeServiceNames : expiredServiceNames}
             </div>
-            <p className="mt-4 mb-1 font-semibold">{props.price} USD / {packageDuration()}</p>
+            <p className="mt-4 mb-1 font-semibold">{props.price / 0.00032} USD / {packageDuration()}</p>
         </section>
     </div>
   );

@@ -9,11 +9,12 @@ interface PackageContextProps {
     newPackage: PackageProps;
     activePackages: PackageProps[];
     expiredPackages: PackageProps[];
+    paymentAction: string;
     setPackage: (newPackage: PackageProps) => void;
-    addPackage: () => void;
+    addPackage: (action: string) => void;
     deactivatePackage: (packageID: string) => void;
     removePackage: (packageID: string) => void;
-    renewPackage: (packageID: string) => void;
+    findExpiredPackage: (packageID: string) => void;
 };
 
 const initialPackage = {
@@ -31,24 +32,40 @@ const PackageContext = createContext<PackageContextProps>({
     newPackage: initialPackage,
     activePackages: [],
     expiredPackages: [],
+    paymentAction: '',
     setPackage: () => {},
     addPackage: () => {},
     deactivatePackage: () => {},
     removePackage: () => {},
-    renewPackage: () => {}
+    findExpiredPackage: () => {}
 });
 
 export const PackageProvider = (props: ProviderProps) => {
     const [newPackage, setNewPackage] = useState<PackageProps>(initialPackage);
     const [activePackages, setActivePackages] = useState<PackageProps[]>([]);
     const [expiredPackages, setExpiredPackages] = useState<PackageProps[]>([]);
+    const [paymentAction, setPaymentAction] = useState('');
 
     const setPackage = (pkg: PackageProps) => {
         setNewPackage(pkg);
+        setPaymentAction('Add');
     };
 
-    const addPackage = () => {
-        setActivePackages((prevPackages) => [...prevPackages, newPackage]);
+    const addPackage = (action: string) => {
+        switch(action) {
+            case 'Add': {
+                setActivePackages((prevPackages) => [...prevPackages, newPackage]);
+                break;
+            };
+            case 'Renew': {
+                setExpiredPackages((prevExpPackages) => {
+                    setActivePackages((prevPackages) => [...prevPackages, newPackage]);
+                    return prevExpPackages.filter(pkg => pkg.packageID !== newPackage.packageID);
+                });
+                break;
+            }
+            default: { throw new Error ('Error: Invalid action at payment!'); }
+        }
     };
 
     const deactivatePackage = (packageID: string) => {
@@ -68,21 +85,17 @@ export const PackageProvider = (props: ProviderProps) => {
         setNewPackage(initialPackage);
     };
 
-    const renewPackage = (packageID: string) => {
-        setExpiredPackages((prevExpPackages) => {
-            var tmpPackage = expiredPackages.find(p => p.packageID === packageID);
-            if(tmpPackage) {
-                tmpPackage!.isActive = true;
-                setNewPackage(tmpPackage!);
-                setActivePackages((prevPackages) => [...prevPackages, tmpPackage!]);
-                return prevExpPackages.filter(pkg => pkg.packageID !== packageID);
-            }
-            return prevExpPackages;
-        });
-    }
+    const findExpiredPackage = (packageID: string) => {
+        var tmpPackage = expiredPackages.find(p => p.packageID === packageID);
+        if(tmpPackage) {
+            tmpPackage!.isActive = true;
+            setNewPackage(tmpPackage!);
+            setPaymentAction('Renew');
+        }
+    };
 
     return(
-        <PackageContext.Provider value={{newPackage, activePackages, expiredPackages, setPackage, addPackage, deactivatePackage, removePackage, renewPackage}}>
+        <PackageContext.Provider value={{newPackage, activePackages, expiredPackages, paymentAction, setPackage, addPackage, deactivatePackage, removePackage, findExpiredPackage}}>
             {props.children}
         </PackageContext.Provider>
     );
