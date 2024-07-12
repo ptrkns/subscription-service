@@ -34,7 +34,7 @@ function Subscriptions() {
   });
 
   return (
-    <div className="min-h-screen md:mt-20">
+    <div className="min-h-screen md:my-20 md:mb-40">
       <section>
           <h1 className="font-bold text-2xl md:text-4xl py-4 text-gray-800 cursor-default">Active subscriptions</h1>
           {activePackages.length !== 0 && <p className="text-base md:text-xl mb-5 cursor-default">Warning: Cancellation of the subscriptions is immediate! By performing this action, you will loose access to the services!</p>}

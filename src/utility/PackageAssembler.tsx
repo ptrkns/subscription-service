@@ -5,11 +5,11 @@ import { ServiceProps } from "../interfaces/ServiceProps.tsx";
 export const PackageAssembler = () => {
 
     function calculatePrice(services: ServiceProps[]) {
-        let sum = 0;
+        var sum = 0;
         services.forEach((service) => {
             sum += service.price;
         });
-        return sum;
+        return sum * 0.00032;
     }
 
     const generateRandomID = customAlphabet('0123456789', 5);
